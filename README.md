@@ -2,6 +2,7 @@
 
 A simple tool for checking out all Github repositories of an organisation or an user.
 
+
 ## Usage
 
 ```bash
