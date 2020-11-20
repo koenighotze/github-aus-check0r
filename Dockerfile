@@ -2,8 +2,9 @@ FROM koenighotze/github-cli:1.0.0
 
 USER root
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends jq=1.5+dfsg-2+b1 \
-    && rm -rf /var/lib/apt/lists/*
+    && apt-get install -y --no-install-recommends jq=1.5+dfsg-2+b1
+    # \
+    # && rm -rf /var/lib/apt/lists/*
 RUN adduser auscheckor --system
 USER auscheckor
 WORKDIR /home/auscheckor
