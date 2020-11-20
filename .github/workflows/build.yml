@@ -35,9 +35,8 @@ jobs:
           labels: ${{ steps.docker_meta.outputs.labels }}
           build-args: |
             NAME=koenighotze/auschecker
-
-# DESCRIPTION="Simple tool for checking out repos"
-# VERSION="1.1"
+            DESCRIPTION=Simple tool for checking out repos
+            VERSION=1.1
 
 # COMMIT_SHA="${{ github.sha }}"
 # BUILD_TIMESTAMP="${{ steps.time.outputs.time }}"
