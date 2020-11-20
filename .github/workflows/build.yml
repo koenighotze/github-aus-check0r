@@ -6,7 +6,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: |
-          docker run hadolint/hadolint < Dockerfile
+          docker run -i hadolint/hadolint < Dockerfile
   build:
     runs-on: ubuntu-20.04
     needs: lint
