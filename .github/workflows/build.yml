@@ -47,7 +47,7 @@ jobs:
           build-args: |
             NAME=koenighotze/auschecker
             DESCRIPTION=Simple tool for checking out repos
-            VERSION=1.1
+            VERSION=${{ steps.docker_meta.outputs.version }}
             COMMIT_SHA=${{ github.sha }}
             BUILD_TIMESTAMP=${{ steps.time.outputs.time }}
             VCS_URL=${{ github.repository }}
