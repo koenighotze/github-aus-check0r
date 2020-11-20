@@ -5,9 +5,8 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-      - uses: docker://hadolint/hadolint
-        run: |
-          hadolint /github/workspace/Dockerfile
+      - run: |
+          docker run hadolint/hadolint < Dockerfile
   build:
     runs-on: ubuntu-20.04
     needs: lint
