@@ -20,10 +20,14 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Get Time
+        id: time
+        uses: nanzm/get-time-action@v1.1
+        with:
+          timeZone: 110 # Berlin
+          format: 'YYYY-MM-DD-HH-mm-ss'
       - name: Build
         uses: docker/build-push-action@v2
-        env:
-          COMMIT_SHA: ${{env.GITHUB_SHA}}
         with:
           push: false
           #push: ${{ github.event_name != 'pull_request' }}
@@ -33,7 +37,7 @@ jobs:
             NAME=koenighotze/auschecker
             DESCRIPTION="Simple tool for checking out repos"
             VERSION=1.1
-            COMMIT_SHA=${{ env.COMMIT_SHA }}
-            BUILD_TIMESTAMP=2020-01-01
-            VCS_URL=FOO
+            COMMIT_SHA=${{ github.sha }}
+            BUILD_TIMESTAMP="${{ steps.time.outputs.time }}"
+            VCS_URL=${{ github.repository }}
 
