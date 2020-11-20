@@ -31,7 +31,7 @@ jobs:
             NAME=koenighotze/auschecker
             DESCRIPTION="Simple tool for checking out repos"
             VERSION=1.1
-            COMMIT_SHA=${{ env.GITHUB_SHA }}
+            COMMIT_SHA={ env.GITHUB_SHA }
             BUILD_TIMESTAMP=2020-01-01
-            VCS_URL=${{ env.GITHUB_REPOSITORY }}
+            VCS_URL={ env.GITHUB_REPOSITORY }
 
