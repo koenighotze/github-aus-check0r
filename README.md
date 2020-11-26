@@ -1,5 +1,8 @@
 # Github - Auscheck0r
 
+![build](https://github.com/koenighotze/github-aus-check0r/workflows/build/badge.svg?branch=main)
+
+
 A simple tool for checking out all Github repositories of an organisation or an user.
 
 
