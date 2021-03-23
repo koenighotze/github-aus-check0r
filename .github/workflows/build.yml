@@ -5,8 +5,17 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-      - run: |
-          docker run -i hadolint/hadolint < Dockerfile
+
+      - name: Lint docker
+        run: docker run -i hadolint/hadolint < Dockerfile
+
+      - name: Lint shell
+        uses: ludeeus/action-shellcheck@master
+
+      - name: Lint markdown
+        run: |
+          npm ci
+          npm run markdown-lint
 
   build:
     runs-on: ubuntu-20.04
@@ -35,7 +44,7 @@ jobs:
       - name: Login to DockerHub
         uses: docker/login-action@v1
         with:
-          username: koenighotze # ${{ secrets.DOCKERHUB_USERNAME }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build
         uses: docker/build-push-action@v2
