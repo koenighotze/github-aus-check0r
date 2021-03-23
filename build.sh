@@ -1,12 +1,12 @@
-#!/bin/sh
+#!/bin/bash
 
 docker run --rm -i hadolint/hadolint < Dockerfile || exit
 
-VCS_URL=`git config --get remote.origin.url`
-BUILD_TIMESTAMP=`date -u +'%Y-%m-%dT%H:%M:%SZ'`
+VCS_URL=$(git config --get remote.origin.url)
+BUILD_TIMESTAMP=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 VERSION=latest
-COMMIT_SHA=`git rev-parse HEAD`
-DIRTY=`( [[ -z $(git status -s) ]] && echo '' ) || echo '-dirty'`
+COMMIT_SHA=$(git rev-parse HEAD)
+DIRTY=$( ( [[ -z $(git status -s) ]] && echo '' ) || echo '-dirty' )
 
 NAME=github-auscheck0r
 DESCRIPTION='Image offering Github CLI'
