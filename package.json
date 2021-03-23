@@ -1,0 +1,31 @@
+{
+  "name": "github-aus-check0r",
+  "version": "1.0.0",
+  "description": "![build](https://github.com/koenighotze/github-aus-check0r/workflows/build/badge.svg?branch=main)",
+  "scripts": {
+    "markdown-lint": "npx remark-cli .",
+    "markdown-lint-fix": "npx remark-cli . -o"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/koenighotze/github-aus-check0r.git"
+  },
+  "author": "David Schmitz",
+  "bugs": {
+    "url": "https://github.com/koenighotze/github-aus-check0r/issues"
+  },
+  "homepage": "https://github.com/koenighotze/github-aus-check0r#readme",
+  "devDependencies": {
+    "remark": "^13.0.0",
+    "remark-cli": "^9.0.0",
+    "remark-preset-lint-markdown-style-guide": "^4.0.0",
+    "remark-preset-lint-recommended": "^5.0.0"
+  },
+  "remarkConfig": {
+    "plugins": [
+      "remark-lint-emphasis-marker",
+      "remark-lint-strong-marker",
+      "remark-preset-lint-recommended"
+    ]
+  }
+}

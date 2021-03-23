@@ -5,14 +5,24 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-      - run: |
-          docker run -i hadolint/hadolint < Dockerfile
+
+      - name: Lint docker
+        run: docker run -i hadolint/hadolint < Dockerfile
+
+      - name: Lint shell
+        uses: ludeeus/action-shellcheck@master
+
+      - name: Lint markdown
+        run: |
+          npm ci
+          npm run markdown-lint
 
   build:
     runs-on: ubuntu-20.04
     needs: lint
     steps:
       - uses: actions/checkout@v2
+      
       - name: Docker meta
         id: docker_meta
         uses: crazy-max/ghaction-docker-meta@v1
@@ -22,21 +32,25 @@ jobs:
           tag-semver: |
             {{version}}
             {{major}}.{{minor}}
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
         with:
           install: true
+
       - name: Get Time
         id: time
         uses: nanzm/get-time-action@v1.1
         with:
           timeZone: 110 # Berlin
           format: "YYYY-MM-DD-HH-mm-ss"
+
       - name: Login to DockerHub
         uses: docker/login-action@v1
         with:
-          username: koenighotze # ${{ secrets.DOCKERHUB_USERNAME }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+
       - name: Build
         uses: docker/build-push-action@v2
         with:
