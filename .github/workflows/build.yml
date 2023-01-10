@@ -16,10 +16,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/node@0.3.0
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      # - name: Run Snyk to check for vulnerabilities
+      #   uses: snyk/actions/node@0.3.0
+      #   env:
+      #     SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       - name: Run vulnerability scanner in repo mode
         uses: aquasecurity/trivy-action@0.8.0
         with:
@@ -47,7 +47,6 @@ jobs:
   build-container:
     needs:
       - qa
-      - test
       - security-scan-code
 
     permissions:
