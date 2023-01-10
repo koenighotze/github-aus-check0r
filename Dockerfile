@@ -1,8 +1,8 @@
-FROM koenighotze/github-cli:1.0.0
+FROM koenighotze/github-cli:2.0.0
 
 USER root
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends jq=1.5+dfsg-2+b1 \
+    && apt-get install -y --no-install-recommends jq=1.6-2.1 \
     && rm -rf /var/lib/apt/lists/*
 
 RUN adduser auscheckor --system
