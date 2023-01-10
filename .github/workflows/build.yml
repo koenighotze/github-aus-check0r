@@ -1,87 +1,77 @@
-name: build
-on: [push]
+name: Build
+
+on:
+  push:
+    branches: [main]
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
 jobs:
-  lint:
+  security-scan-code:
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v3.1.0
-
-      - name: Lint docker
-        run: docker run -i hadolint/hadolint < Dockerfile
-
-      - name: Run hadolint with reviewdog
-        uses: reviewdog/action-hadolint@v1
-
-        name: Example workflow for Docker using Snyk 
-on: push
-jobs:
-  security:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Run Snyk to check Docker image for vulnerabilities
-      uses: snyk/actions/docker@master
-      env:
-        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-      with:
-        image: your/image-to-test
-
-
-
-        
-
-      - name: Lint shell
-        uses: ludeeus/action-shellcheck@master
-
-      - name: Lint markdown
-        run: |
-          npm ci
-          npm run markdown-lint
-
-  build:
-    runs-on: ubuntu-20.04
-    needs: lint
-    steps:
-      - uses: actions/checkout@v3.1.0
-      
-      - name: Docker meta
-        id: docker_meta
-        uses: crazy-max/ghaction-docker-meta@v3.6.2
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/node@0.3.0
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      - name: Run vulnerability scanner in repo mode
+        uses: aquasecurity/trivy-action@0.8.0
         with:
-          images: koenighotze/github-auschecker
-          tag-sha: true
-          tag-semver: |
-            {{version}}
-            {{major}}.{{minor}}
+          scan-type: "fs"
+          ignore-unfixed: false
+          format: "table"
+          exit-code: "1"
+          severity: "CRITICAL"
 
+  qa:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Check Dockerfile
+        uses: hadolint/hadolint-action@v3.0.0
+        with:
+          verbose: true
+      - name: Check shell scripts
+        uses: ludeeus/action-shellcheck@1.1.0
+        with:
+          severity: warning
+          scandir: '.'
+
+  build-container:
+    needs:
+      - qa
+      - test
+      - security-scan-code
+
+    permissions:
+      id-token: write
+      contents: read
+
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1.3.0
-        with:
-          install: true
-
-      - name: Get Time
-        id: time
-        uses: nanzm/get-time-action@v1.1
-        with:
-          timeZone: 110 # Berlin
-          format: "YYYY-MM-DD-HH-mm-ss"
-
-      - name: Login to DockerHub
-        uses: docker/login-action@v1
+        uses: docker/setup-buildx-action@v2
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Build
-        uses: docker/build-push-action@v2.4.0
+      - name: Build image
+        uses: docker/build-push-action@v3
         with:
-          context: .
-          push: ${{ startsWith(github.ref, 'refs/tags/') }}
-          tags: ${{ steps.docker_meta.outputs.tags }}
-          labels: ${{ steps.docker_meta.outputs.labels }}
-          build-args: |
-            NAME=koenighotze/auschecker
-            DESCRIPTION=Simple tool for checking out repos
-            VERSION=${{ steps.docker_meta.outputs.version }}
-            COMMIT_SHA=${{ github.sha }}
-            BUILD_TIMESTAMP=${{ steps.time.outputs.time }}
-            VCS_URL=${{ github.repository }}
+          push: false
+          # tags: foo,bar
+          # build-args: foo,bar
+          # labels: |
+          #   foo
+          #   bar
