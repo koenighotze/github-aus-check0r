@@ -2,6 +2,7 @@
 
 ![build](https://github.com/koenighotze/github-aus-check0r/workflows/build/badge.svg?branch=main)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/6d724f8ad65d4f4593b7ca91ab23cc09)](https://www.codacy.com/gh/koenighotze/github-aus-check0r/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=koenighotze/github-aus-check0r&amp;utm_campaign=Badge_Grade)
+[![Known Vulnerabilities](https://snyk.io/test/github/koenighotze/github-aus-check0r/badge.svg)](https://snyk.io/test/github/koenighotze/github-aus-check0r)
 
 A simple tool for checking out all Github repositories of an organisation or an user.
 
